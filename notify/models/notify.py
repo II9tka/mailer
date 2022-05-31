@@ -63,8 +63,10 @@ class Notify(AbstractNotify):
             postpone_on=postpone_on
         ) for receiver in user.receivers.values())
 
-        # send_mass_html_mail.delay(notifies=[n.pk for n in notifies], postpone_on=str(postpone_on))
-        send_mass_html_mail(notifies=[n.pk for n in notifies], postpone_on=str(postpone_on))
+        if postpone_on:
+            postpone_on = str(postpone_on)
+
+        send_mass_html_mail.delay(notifies=[n.pk for n in notifies], postpone_on=postpone_on)
 
         return True
 
